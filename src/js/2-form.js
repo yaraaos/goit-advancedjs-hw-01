@@ -3,7 +3,7 @@ let form = document.querySelector('.feedback-form');
 const localStorageKey = 'feedback-form-state';
 
 if (localStorage.getItem(localStorageKey)) {
-  formData = JSON.parse(localStorage.getItem(localStorageKey));
+  formData = JSON.parse(localStorage.getItem(localStorageKey)) || {};
   form.elements.email.value = formData.email || '';
   form.elements.message.value = formData.message || '';
 }
@@ -17,11 +17,20 @@ function readData(event) {
 form.addEventListener('submit', handleSubmit);
 function handleSubmit(evt) {
   evt.preventDefault();
-  if (form.elements.email.value === '' || form.elements.message.value === '') {
-    alert('Fill please all fields');
-  } else {
-    console.log(formData);
+
+  const email = form.elements.email.value.trim();
+  const message = form.elements.message.value.trim();
+
+  if (email === '' || message === '') {
+    alert('Please fill in all fields');
+    return;
+    }
+
+    console.log('Submitted data:', formData);
+
+
     localStorage.removeItem(localStorageKey);
+    formData = { email: '', message: '' };
+
     form.reset();
-  };
 };
